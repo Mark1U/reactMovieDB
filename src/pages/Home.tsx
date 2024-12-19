@@ -1,29 +1,53 @@
-import { NavLink, useParams } from "react-router";
-import { images } from "../data/images";
-import { ImageItem } from "../interfaces/ImageItem";
-import ImgModal from "../components/ImgModal";
+import movies from "../data/movies";
 
-const Home = () => {
-  let { imgId } = useParams();
-  let img: ImageItem | undefined = undefined;
-  if (imgId) {
-    console.log(imgId);
-    img = images.find((img) => img.id === imgId);
+interface Props {
+  sort: number;
+}
+
+const Home = ({ sort }: Props) => {
+  // let location = useLocation();
+  console.log(location);
+  // img = images.find((img) => img.id === imgId);
+
+  const _movies = [...movies];
+
+  switch (sort) {
+    case 0:
+      _movies.sort((a, b) => Number(a.year) - Number(b.year));
+      break;
+    case 1:
+      _movies.sort((a, b) => Number(b.year) - Number(a.year));
+      break;
+    case 2:
+      _movies.sort((a, b) => Number(b.rate) - Number(a.rate));
+      break;
+    case 3:
+      _movies.sort((a, b) =>
+        a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1
+      );
+      break;
+    case 4:
+      _movies.sort((a, b) =>
+        a.title.toLowerCase() < b.title.toLowerCase() ? 1 : -1
+      );
+      break;
   }
 
   return (
-    //grid-rows-[masonry] auto-rows-[10px]
     <section className="px-8 py-2 grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))]  gap-4">
-      {<ImgModal img={img} open={img != undefined} />}
-
-      {images.map((img) => (
-        <NavLink to={"/images/" + img.id + "/" + img.slug}>
-          <img
-            className="rounded-md  block"
-            src={img.urls.small_s3}
-            alt={img.id}
-          />
-        </NavLink>
+      {_movies.map((mov) => (
+        <div className="p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 text-gray-50">
+          <h3 className="font-bold text-xl">{mov.title}</h3>
+          <p>{mov.year}</p>
+          <p>{mov.director}</p>
+          <p>{mov.duration}</p>
+          <p>{mov.rate}</p>
+          <div>
+            {mov.genre.map((genre) => (
+              <p className="text-sm text-gray-400">{genre}</p>
+            ))}
+          </div>
+        </div>
       ))}
     </section>
   );

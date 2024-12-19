@@ -13,9 +13,11 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="/" element={<RootLayout />}>
-        {/* Index = Startseite */}
-        <Route index element={<Home />} />
-        <Route path="images/:imgId/:slug" element={<Home />} />
+        <Route path="/date-asc" element={<Home sort={0} />} />
+        <Route path="date-desc" element={<Home sort={1} />} />
+        <Route path="/" element={<Home sort={2} />} />
+        <Route path="a-z" element={<Home sort={3} />} />
+        <Route path="z-a" element={<Home sort={4} />} />
         <Route path="*" element={<NoMatch />} />
       </Route>
     </>
